@@ -1,0 +1,78 @@
+{
+    "name": "vlados/filament-tailscale-theme",
+    "description": "A light, Tailscale-console-inspired overlay theme for the Filament v5 admin panel.",
+    "keywords": [
+        "vlados",
+        "laravel",
+        "filamentphp",
+        "filament",
+        "filament-plugin",
+        "filament-tailscale-theme"
+    ],
+    "homepage": "https://github.com/vlados/filament-tailscale-theme",
+    "support": {
+        "issues": "https://github.com/vlados/filament-tailscale-theme/issues",
+        "source": "https://github.com/vlados/filament-tailscale-theme"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Vladislav Stoitsov",
+            "email": "vlados.01@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "filament/filament": "^5.0",
+        "spatie/laravel-package-tools": "^1.15.0"
+    },
+    "require-dev": {
+        "larastan/larastan": "^3.0",
+        "laravel/pint": "^1.0",
+        "nunomaduro/collision": "^8.0",
+        "orchestra/testbench": "^9.0|^10.0|^11.0",
+        "pestphp/pest": "^3.7|^4.0",
+        "pestphp/pest-plugin-arch": "^3.0|^4.0",
+        "pestphp/pest-plugin-laravel": "^3.0|^4.0",
+        "pestphp/pest-plugin-livewire": "^3.0|^4.0",
+        "rector/rector": "^2.0",
+        "spatie/laravel-ray": "^1.26"
+    },
+    "autoload": {
+        "psr-4": {
+            "Vlados\\FilamentTailscaleTheme\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Vlados\\FilamentTailscaleTheme\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "post-autoload-dump": "@php ./vendor/bin/testbench package:discover --ansi",
+        "analyse": "phpstan analyse",
+        "lint": "pint",
+        "refactor": "rector",
+        "test": "pest",
+        "test:lint": "pint --test",
+        "test:refactor": "rector --dry-run"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Vlados\\FilamentTailscaleTheme\\FilamentTailscaleThemeServiceProvider"
+            ]
+        }
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "composer/package-versions-deprecated": true,
+            "pestphp/pest-plugin": true,
+            "phpstan/extension-installer": true
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

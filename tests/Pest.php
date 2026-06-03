@@ -1,0 +1,5 @@
+<?php
+
+use Vlados\FilamentTailscaleTheme\Tests\TestCase;
+
+uses(TestCase::class)->in(__DIR__);

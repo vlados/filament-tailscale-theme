@@ -1,0 +1,378 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   vlados/filament-tailscale-theme
+   A light Tailscale-console overlay theme for Filament v5 admin panels.
+
+   Overlay stylesheet — loads on top of Filament's default theme. Scoped to
+   `html:not(.dark)` so dark mode falls back to Filament defaults. The two-row
+   header rules assume the panel uses ->topNavigation().
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TAILSCALE-CONSOLE LIGHT THEME (top navigation) — the default look.
+   A warm-neutral, airy admin chrome modeled on the Tailscale dashboard:
+     • a TWO-ROW top header (brand + user actions on row 1, nav tabs on row 2)
+       on a single warm light-gray field, with a blue underline on the active tab;
+     • a white content canvas;
+     • a borderless, hairline-divided minimalist table (uppercase muted column
+       heads, generous rows, subtle hover, no zebra, no card, no shadows).
+   Everything here is scoped to `html:not(.dark)` so the dark cockpit mode (and
+   the always-dark site cockpit page) is left exactly as-is.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+html:not(.dark) {
+    --ts-bg: #ffffff;                       /* content canvas */
+    --ts-header: #f3f2ef;                   /* warm light-gray header (both rows) */
+    --ts-hairline: rgb(28 25 23 / 0.11);    /* warm stone hairline (dividers) */
+    --ts-hairline-soft: rgb(28 25 23 / 0.06);
+    --ts-text: #1c1917;                     /* stone-900, near-black */
+    --ts-muted: #78716c;                    /* stone-500, labels + inactive nav */
+    --ts-faint: #a8a29e;                    /* stone-400, icons */
+    --ts-accent: #3b5bdb;                   /* indigo-blue: active nav, links */
+}
+
+/* Canvas → white (drop the slate tint). */
+html:not(.dark),
+html:not(.dark) body,
+html:not(.dark) .fi-body {
+    background-color: var(--ts-bg);
+}
+
+/* ── Two-row header ───────────────────────────────────────────────────────── */
+/* The full-width warm-gray band lives on the OUTER container (edge to edge)... */
+html:not(.dark) .fi-topbar-ctn {
+    background-color: var(--ts-header);
+    border-bottom: 1px solid var(--ts-hairline);
+}
+/* ...while the header CONTENT is constrained to the page-content width (1280px /
+   2rem padding, matching .fi-main) so brand + nav line up with the body below. */
+html:not(.dark) .fi-topbar {
+    height: auto;
+    min-height: 0;
+    width: 100%;
+    max-width: 80rem;
+    margin-inline: auto;
+    flex-wrap: wrap;
+    align-items: center;
+    row-gap: 0;
+    padding-block: 0;
+    padding-inline: 2rem;
+    background-color: transparent;
+    border-bottom: none;
+    box-shadow: none;
+}
+
+/* Row 1: brand on the left, user actions (search/bell/avatar) pushed right.
+   Tight padding so the two rows sit close (Tailscale-compact). */
+html:not(.dark) .fi-topbar-start { order: 1; padding-block: 0.5rem; }
+html:not(.dark) .fi-topbar-end {
+    order: 2;
+    margin-inline-start: auto;
+    padding-block: 0.5rem;
+}
+
+/* Row 2: the nav tabs, full width, flush-left under the brand. */
+html:not(.dark) .fi-topbar-nav-groups {
+    order: 3;
+    flex-basis: 100%;
+    width: 100%;
+    gap: 0;
+    margin-top: 0;                  /* kill Filament's stray top margin (the row gap) */
+    margin-bottom: -1px;            /* overlap the topbar's own bottom hairline */
+}
+
+/* Nav tabs: rounded-top tab cells — quiet gray, muted icon, a soft hover wash,
+   blue text + underline when active. */
+html:not(.dark) .fi-topbar-item-btn {
+    gap: 0.4rem;
+    padding-block: 0.5rem;
+    padding-inline: 0.6rem;
+    margin-inline-start: 0;
+    margin-inline-end: 0.25rem;
+    font-weight: 500;
+    font-size: 0.875rem;
+    color: var(--ts-muted);
+    background-color: transparent;
+    border-bottom: 2px solid transparent;
+    border-radius: 0.4rem 0.4rem 0 0;
+    transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+}
+/* First tab's text lines up with the brand + page content (offset its padding). */
+html:not(.dark) .fi-topbar-nav-groups > .fi-topbar-item:first-child .fi-topbar-item-btn {
+    margin-inline-start: -0.6rem;
+}
+html:not(.dark) .fi-topbar-item-icon {
+    width: 1.1rem;
+    height: 1.1rem;
+    color: var(--ts-faint);
+}
+html:not(.dark) .fi-topbar-item:not(.fi-active) .fi-topbar-item-btn:hover {
+    color: var(--ts-text);
+    background-color: rgb(28 25 23 / 0.05);
+}
+html:not(.dark) .fi-topbar-item-btn:hover .fi-topbar-item-icon { color: var(--ts-muted); }
+html:not(.dark) .fi-topbar-item.fi-active .fi-topbar-item-btn {
+    color: var(--ts-accent);
+    border-bottom-color: var(--ts-accent);
+}
+html:not(.dark) .fi-topbar-item.fi-active .fi-topbar-item-icon { color: var(--ts-accent); }
+
+/* Brand wordmark: a touch stronger. */
+html:not(.dark) .fi-topbar .fi-logo { color: var(--ts-text); font-weight: 650; }
+
+/* ── Minimalist table ─────────────────────────────────────────────────────── */
+/* No card: borderless, transparent — just hairline row dividers do the work. */
+html:not(.dark) .fi-ta-ctn {
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    background-color: transparent;
+}
+/* Toolbar (search + filters) and header strip sit flush, no fill. */
+html:not(.dark) .fi-ta-header,
+html:not(.dark) .fi-ta-header-cell {
+    background-color: transparent;
+}
+/* Column headers: uppercase, tiny, letter-spaced, muted. */
+html:not(.dark) .fi-ta-header-cell,
+html:not(.dark) .fi-ta-header-cell-sort-btn {
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--ts-muted);
+}
+html:not(.dark) .fi-ta-header-cell { border-bottom: 1px solid var(--ts-hairline); }
+/* Rows: airy, hairline divider, subtle warm hover, no zebra. */
+html:not(.dark) .fi-ta-row { border-bottom: 1px solid var(--ts-hairline-soft); }
+html:not(.dark) .fi-ta-row:hover { background-color: rgb(28 25 23 / 0.025); }
+html:not(.dark) .fi-ta-cell .fi-ta-text,
+html:not(.dark) .fi-ta-cell .fi-ta-icon,
+html:not(.dark) .fi-ta-cell .fi-ta-color,
+html:not(.dark) .fi-ta-cell .fi-ta-image,
+html:not(.dark) .fi-ta-cell .fi-ta-select { padding-block: 0.6rem; }
+/* Leading cell reads as the primary value (near-black, slightly bolder). */
+html:not(.dark) .fi-ta-cell:first-of-type .fi-ta-text {
+    color: var(--ts-text);
+    font-weight: 600;
+}
+
+/* ── Controls & surfaces: hairline borders, no shadows ─────────────────────── */
+html:not(.dark) .fi-section {
+    border: 1px solid var(--ts-hairline);
+    box-shadow: none;
+}
+html:not(.dark) .fi-btn { box-shadow: none; }
+
+/* Primary CTAs: solid Tailscale indigo + white text (override Filament's soft
+   `fi-bg-color-400` tint). Outlined/link primary buttons keep their treatment. */
+html:not(.dark) .fi-btn.fi-color-primary:not(.fi-btn-outlined):not(.fi-link) {
+    background-color: var(--ts-accent);
+    color: #ffffff;
+}
+html:not(.dark) .fi-btn.fi-color-primary:not(.fi-btn-outlined):not(.fi-link):hover {
+    background-color: #3450c6;
+    color: #ffffff;
+}
+
+/* ── Tabs: minimal underline (not a segmented pill) ───────────────────────── */
+/* Tailscale-style: no box, a single hairline under the row, blue underline on
+   the active tab, muted text otherwise. */
+html:not(.dark) .fi-tabs {
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid var(--ts-hairline);
+    border-radius: 0;
+    box-shadow: none;
+    padding: 0;
+    gap: 0;
+    justify-content: flex-start;
+    width: 100%;
+}
+html:not(.dark) .fi-tabs-item {
+    background-color: transparent;
+    border-radius: 0;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;            /* sit the underline on the row hairline */
+    margin-inline: 0;
+    padding-block: 0.65rem;
+    padding-inline: 0.2rem;
+    margin-inline-end: 1.4rem;
+    color: var(--ts-muted);
+    font-weight: 500;
+}
+html:not(.dark) .fi-tabs-item:hover { color: var(--ts-text); }
+html:not(.dark) .fi-tabs-item.fi-active {
+    background-color: transparent;
+    color: var(--ts-accent);
+    border-bottom-color: var(--ts-accent);
+}
+html:not(.dark) .fi-tabs-item.fi-active .fi-tabs-item-label,
+html:not(.dark) .fi-tabs-item .fi-tabs-item-label { color: inherit; }
+
+/* ── Page heading + breadcrumbs: lighter, calmer ──────────────────────────── */
+/* h1 semibold (not black), breadcrumbs small + muted. */
+html:not(.dark) .fi-header-heading {
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--ts-text);
+}
+html:not(.dark) .fi-breadcrumbs,
+html:not(.dark) .fi-breadcrumbs-item {
+    font-size: 0.8125rem;
+    color: var(--ts-muted);
+}
+html:not(.dark) .fi-breadcrumbs-item-label { color: var(--ts-muted); }
+
+/* ═══ TEAM POLISH PASS — header dropdowns, table controls, forms ──────────────
+   Synthesized from a 3-surface design audit. All `html:not(.dark)` so the dark
+   cockpit is untouched. (Skipped: global badge color-graying — it would gray the
+   status badge, handled in the row blade instead; the generic `.fi-ac` save-row
+   border; and a global `a` accent that would blue the breadcrumbs/row names.) */
+
+/* ── Header: bell + avatar + nav chevron ──────────────────────────────────── */
+html:not(.dark) .fi-topbar-end { gap: 0.25rem; }
+html:not(.dark) .fi-topbar-end .fi-icon-btn { color: var(--ts-faint); border-radius: 0.5rem; }
+html:not(.dark) .fi-topbar-end .fi-icon-btn:hover {
+    background-color: rgb(28 25 23 / 0.025);
+    color: var(--ts-muted);
+}
+html:not(.dark) .fi-user-menu-trigger { border-radius: 9999px; padding: 0.125rem; }
+html:not(.dark) .fi-user-menu-trigger:hover { background-color: rgb(28 25 23 / 0.025); }
+html:not(.dark) .fi-user-menu-trigger .fi-avatar { box-shadow: 0 0 0 1px var(--ts-hairline-soft); }
+html:not(.dark) .fi-topbar-group-toggle-icon {
+    width: 0.85rem;
+    height: 0.85rem;
+    margin-inline-start: 0.1rem;
+    color: var(--ts-faint);
+}
+html:not(.dark) .fi-topbar-item.fi-active .fi-topbar-group-toggle-icon { color: var(--ts-accent); }
+
+/* ── Dropdown panels (nav groups, bell, user menu): hairline, soft lift ────── */
+html:not(.dark) .fi-dropdown-panel {
+    border: 1px solid var(--ts-hairline);
+    border-radius: 0.625rem;
+    box-shadow: 0 4px 16px rgb(28 25 23 / 0.06);
+}
+html:not(.dark) .fi-dropdown-list { padding: 0.25rem; }
+html:not(.dark) .fi-dropdown-list-item { border-radius: 0.375rem; color: var(--ts-text); font-weight: 500; }
+html:not(.dark) .fi-dropdown-list-item:hover { background-color: rgb(28 25 23 / 0.025); }
+html:not(.dark) .fi-dropdown-list-item-icon { color: var(--ts-faint); }
+html:not(.dark) .fi-dropdown-header {
+    color: var(--ts-muted);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+/* ── Table: align + quiet the edge cells ──────────────────────────────────── */
+/* The actions column cell carries its own 16px py (Filament default) on TOP of the
+   inner .fi-ta-actions padding — that double-pad makes it the tallest cell and
+   stretches the whole row. Zero the cell; let the inner padding set the height. */
+html:not(.dark) .fi-ta-cell:has(.fi-ta-actions) { padding-block: 0; }
+html:not(.dark) .fi-ta-cell .fi-ta-actions,
+html:not(.dark) .fi-ta-checkbox,
+html:not(.dark) .fi-ta-selection-cell { padding-block: 0.6rem; }
+html:not(.dark) .fi-ta-checkbox,
+html:not(.dark) .fi-ta-selection-cell .fi-checkbox-input {
+    border-color: var(--ts-hairline);
+    border-radius: 0.3125rem;
+}
+html:not(.dark) .fi-ta-actions .fi-icon-btn { color: var(--ts-faint); }
+
+/* ── Badges: smaller, tighter, consistent (color stays meaningful) ────────── */
+html:not(.dark) .fi-badge {
+    font-size: 0.6875rem;
+    font-weight: 500;
+    padding-block: 0.0625rem;
+    padding-inline: 0.4375rem;
+    border-radius: 0.375rem;
+    line-height: 1.25;
+}
+
+/* ── Inputs & controls: one hairline-border + 1px accent focus everywhere ──── */
+html:not(.dark) .fi-input-wrp {
+    border: 1px solid var(--ts-hairline);
+    border-radius: 0.5rem;
+    box-shadow: none;
+    background-color: var(--ts-bg);
+}
+html:not(.dark) .fi-input-wrp:focus-within {
+    border-color: var(--ts-accent);
+    box-shadow: 0 0 0 1px var(--ts-accent);
+}
+html:not(.dark) .fi-ta-header-toolbar { padding-block: 0.75rem; gap: 0.5rem; }
+html:not(.dark) .fi-ta-header-toolbar .fi-icon-btn {
+    border: 1px solid var(--ts-hairline);
+    border-radius: 0.5rem;
+    color: var(--ts-muted);
+    box-shadow: none;
+}
+html:not(.dark) .fi-ta-header-toolbar .fi-icon-btn:hover {
+    background-color: rgb(28 25 23 / 0.025);
+    color: var(--ts-text);
+}
+
+/* ── Pagination: quiet metadata ───────────────────────────────────────────── */
+html:not(.dark) .fi-pagination { border-top: 1px solid var(--ts-hairline-soft); padding-block: 0.875rem; }
+html:not(.dark) .fi-pagination-overview { font-size: 0.8125rem; color: var(--ts-muted); }
+html:not(.dark) .fi-pagination-records-per-page-select { font-size: 0.8125rem; color: var(--ts-text); }
+
+/* ── Form sections: flatten the leaked inner shadow, calm rhythm ──────────── */
+html:not(.dark) .fi-section-content-ctn {
+    box-shadow: none;
+    border-top-color: var(--ts-hairline-soft);
+    background-color: var(--ts-bg);
+}
+html:not(.dark) .fi-section-header { padding: 1.25rem 1.5rem; }
+html:not(.dark) .fi-section-header-heading {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    color: var(--ts-text);
+}
+html:not(.dark) .fi-section-header-description {
+    font-size: 0.8125rem;
+    line-height: 1.45;
+    color: var(--ts-muted);
+}
+html:not(.dark) .fi-section-content { padding: 1.5rem; }
+
+/* ── Form fields: labels + helpers (AA-safe: muted, never faint, for body) ── */
+html:not(.dark) .fi-fo-field-label,
+html:not(.dark) .fi-input-wrp-label {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--ts-text);
+}
+html:not(.dark) .fi-fo-field-wrp-helper-text,
+html:not(.dark) .fi-fo-field-wrp-hint { font-size: 0.75rem; color: var(--ts-muted); }
+html:not(.dark) .fi-fo-field-wrp-error-message { font-size: 0.75rem; color: #b91c1c; }
+
+/* ── Secondary + danger buttons (primary CTA already solid indigo above) ───── */
+html:not(.dark) .fi-btn.fi-color-gray:not(.fi-link) {
+    background-color: var(--ts-bg);
+    color: var(--ts-text);
+    box-shadow: 0 0 0 1px var(--ts-hairline) inset;
+}
+html:not(.dark) .fi-btn.fi-color-gray:not(.fi-link):hover { background-color: rgb(28 25 23 / 0.025); }
+html:not(.dark) .fi-btn.fi-color-danger:not(.fi-btn-outlined):not(.fi-link) {
+    background-color: #dc2626;
+    color: #ffffff;
+}
+
+/* ── Content top spacing: tighten Filament's huge 2rem padding + 2rem row-gap ─ */
+html:not(.dark) .fi-page-header-main-ctn {
+    padding-block: 1.25rem;
+    row-gap: 1rem;
+}
+/* The breadcrumb → heading gap inside the header. */
+html:not(.dark) .fi-header { row-gap: 0.5rem; }
+
+/* ── Page h1 + modals ─────────────────────────────────────────────────────── */
+html:not(.dark) .fi-header-heading { font-size: 1.5rem; }
+html:not(.dark) .fi-modal-window {
+    border: 1px solid var(--ts-hairline);
+    border-radius: 0.75rem;
+    box-shadow: 0 8px 24px rgb(28 25 23 / 0.08);
+}
