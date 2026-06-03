@@ -9,7 +9,7 @@ use Filament\Support\Colors\Color;
 
 class FilamentTailscaleTheme implements Plugin
 {
-    protected array|string|null $primaryColor = null;
+    protected array | string | null $primaryColor = null;
 
     protected bool $forceLightMode = true;
 
@@ -31,7 +31,7 @@ class FilamentTailscaleTheme implements Plugin
         return $plugin;
     }
 
-    public function primaryColor(array|string|null $color): static
+    public function primaryColor(array | string | null $color): static
     {
         $this->primaryColor = $color;
 
